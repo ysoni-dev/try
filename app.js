@@ -20,50 +20,50 @@ app.get('/', async (req, res) => {
 })
 
 // api for translating the text
-app.post('/translate', async (req, res) => {
-    try {
-        const textToTranslate = req.body.text;
+// app.post('/translate', async (req, res) => {
+//     try {
+//         const textToTranslate = req.body.text;
 
-        if (textToTranslate === null || typeof textToTranslate !== 'string' || !textToTranslate.trim()) {
-            return res.status(400).json({ error: 'Text is required in the request body and must be a non-empty string.' });
-        }
+//         if (textToTranslate === null || typeof textToTranslate !== 'string' || !textToTranslate.trim()) {
+//             return res.status(400).json({ error: 'Text is required in the request body and must be a non-empty string.' });
+//         }
 
-        // Check if the content is numeric or not translatable
-        if (/^\d+$/.test(textToTranslate)) {
-            return res.json({
-                message: 'The provided text is invalid and cannot be translated.',
-                originalText: textToTranslate,
-                translatedText: textToTranslate
-            });
-        }
+//         // Check if the content is numeric or not translatable
+//         if (/^\d+$/.test(textToTranslate)) {
+//             return res.json({
+//                 message: 'The provided text is invalid and cannot be translated.',
+//                 originalText: textToTranslate,
+//                 translatedText: textToTranslate
+//             });
+//         }
 
-        const detectedLanguage = langdetect.detectOne(textToTranslate);
+//         const detectedLanguage = langdetect.detectOne(textToTranslate);
 
-        if (detectedLanguage === 'fr') {
-            return res.json({
-                message: 'The provided text is already in French.',
-                originalText: textToTranslate,
-                translatedText: textToTranslate
-            });
-        }
+//         if (detectedLanguage === 'fr') {
+//             return res.json({
+//                 message: 'The provided text is already in French.',
+//                 originalText: textToTranslate,
+//                 translatedText: textToTranslate
+//             });
+//         }
 
-        const translation = await translate(textToTranslate, { to: 'fr' });
+//         const translation = await translate(textToTranslate, { to: 'fr' });
 
-        if (!translation) {
-            return res.status(500).json({ error: 'Translation failed.' });
-        }
+//         if (!translation) {
+//             return res.status(500).json({ error: 'Translation failed.' });
+//         }
 
-        res.json({ originalText: textToTranslate, translatedText: translation });
-    } catch (error) {
-        console.error(error);
+//         res.json({ originalText: textToTranslate, translatedText: translation });
+//     } catch (error) {
+//         console.error(error);
 
-        if (error instanceof SyntaxError) {
-            return res.status(400).json({ error: 'Invalid JSON in the request body.' });
-        }
+//         if (error instanceof SyntaxError) {
+//             return res.status(400).json({ error: 'Invalid JSON in the request body.' });
+//         }
 
-        res.status(500).json({ error: 'Internal server error.' });
-    }
-})
+//         res.status(500).json({ error: 'Internal server error.' });
+//     }
+// })
 
 
 app.listen(PORT, () => {
