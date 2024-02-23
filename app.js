@@ -11,37 +11,16 @@ app.use(cors())
 
 const PORT = 4000
 
-app.get('/', async function (req, res) {
-    try {
-        await homepage(req, res)
-    } catch (error) {
-        console.log(error)
-    }
-})
-
-const homepage = async (req, res) => {
+app.get('/', async (req, res) => {
     try {
         res.send('Type /translate in the URL to get results.');
     } catch (error) {
         console.log(error)
     }
-}
-
-
-
-
-// api for translating the text
-
-app.post('/translate', async function (req, res) {
-    try {
-        await textTranslate(req, res)
-    } catch (error) {
-        console.log(error)
-        res.status(400).json({ error: 'error processing translator.' })
-    }
 })
 
-const textTranslate = async (req, res) => {
+// api for translating the text
+app.post('/translate', async (req, res) => {
     try {
         const textToTranslate = req.body.text;
 
@@ -84,8 +63,9 @@ const textTranslate = async (req, res) => {
 
         res.status(500).json({ error: 'Internal server error.' });
     }
-}
+})
 
-app.listen(PORT,()=>{
+
+app.listen(PORT, () => {
     console.log(`serve is running on ${PORT}`)
 })
